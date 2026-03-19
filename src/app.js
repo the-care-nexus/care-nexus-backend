@@ -1,15 +1,16 @@
 const express = require('express');
-const cors = require('cors');
+const {
+  notFoundHandler,
+  errorHandler,
+} = require('./middlewares/error.middleware');
+const { requestLogMiddleware } = require('./middlewares/requestLog.middleware');
 
 const app = express();
 
-app.use(cors());
-app.use(express.json());
+// Request logging to SystemLog (request type) for system module
+app.use(requestLogMiddleware);
 
-app.get('/', (req, res) => {
-  res.json({
-    message: 'Backend API running successfully',
-  });
-});
+app.use(notFoundHandler);
+app.use(errorHandler);
 
 module.exports = app;
